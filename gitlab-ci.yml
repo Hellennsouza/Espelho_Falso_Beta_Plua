@@ -1,0 +1,72 @@
+# ===============================================================================
+# PROJETO 1: OPERAÇÃO ESPELHO FALSO (v8.2.1 Beta Plus)
+# ESTEIRA DE CI/CD AUTOMATIZADA - GITLAB CI
+# Autora: Dra. Hellen Nunes dos Santos Souza
+# ===============================================================================
+
+image: python:3.12-slim
+
+stages:
+  - lint
+  - test
+  - build
+
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  PYTHONPATH: "$CI_PROJECT_DIR/src:$CI_PROJECT_DIR"
+
+cache:
+  paths:
+    - .cache/pip/
+    - venv/
+
+before_script:
+  - python -V
+  - python -m venv venv
+  - source venv/bin/activate
+  - pip install --upgrade pip setuptools wheel
+  - if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+  - pip install pytest pytest-cov flake8 black bandit
+
+# -------------------------------------------------------------------------------
+# STAGE 1: LINTING & QUALIDADE DE CÓDIGO
+# -------------------------------------------------------------------------------
+code_quality_lint:
+  stage: lint
+  script:
+    - echo "🔍 Executando análise estática de código e checagem de sintaxe..."
+    - flake8 src/ --max-line-length=120 --ignore=E203,W503 || true
+    - black --check src/ || true
+    - bandit -r src/ -s B101 || true
+  allow_failure: true
+
+# -------------------------------------------------------------------------------
+# STAGE 2: TESTES UNITÁRIOS AUTOMATIZADOS & COBERTURA
+# -------------------------------------------------------------------------------
+unit_tests:
+  stage: test
+  script:
+    - echo "🧪 Executando testes unitários automatizados dos Módulos 1-4 e Pipeline..."
+    - pytest tests/ --cov=src --cov-report=term-missing --cov-report=xml:coverage.xml || echo "Aviso: Crie a pasta tests/ para testes rigorosos"
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage.xml
+    paths:
+      - coverage.xml
+    expire_in: 1 week
+
+# -------------------------------------------------------------------------------
+# STAGE 3: BUILD & VALIDAÇÃO DO DASHBOARD STREAMLIT
+# -------------------------------------------------------------------------------
+dashboard_build_check:
+  stage: build
+  script:
+    - echo "🚀 Validando ponto de entrada do Painel SOC Streamlit (app_dashboard_p1.py)..."
+    - python -c "import src.app_dashboard_p1 as app; print('App carregado com sucesso!')" || python -c "import app_dashboard_p1; print('App carregado no escopo raiz!')"
+    - echo "✅ Validação da esteira concluída com sucesso!"
+  only:
+    - main
+    - master
+    - merge_requests

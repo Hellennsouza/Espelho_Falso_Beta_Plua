@@ -1,0 +1,22 @@
+{
+  "pipeline_version": "8.2.1-beta-plus",
+  "status": "OPERATIONAL",
+  "last_execution_utc": "2026-10-17T13:37:51.980169+00:00",
+  "edge_runtime": {
+    "engine": "ONNX Runtime WASM Int8",
+    "avg_latency_ms": 41.8,
+    "throughput_tps": 1420,
+    "zero_disk_persistence": true,
+    "memory_allocated_mb": 14.2
+  },
+  "kpis": {
+    "pix_sla_hours_avg": 3.8,
+    "bcb142_automations_count": 42,
+    "apcer_rate": 0.0008,
+    "bpcer_rate": 0.0085
+  },
+  "integrity": {
+    "telemetry_collector_hash_sha256": "f96d277931c49fcba9d090b0838e30a9a38f2a0e14b39816b68894384133976d",
+    "lgpd_compliance_art11_verified": true
+  }
+}

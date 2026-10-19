@@ -1,0 +1,19 @@
+{
+  "title": "LaudoPericialXAISchema",
+  "type": "object",
+  "required": [
+    "laudo_id",
+    "timestamp_utc",
+    "lgpd_article_compliance",
+    "scib_score",
+    "top_shap_features",
+    "integrity_sha256"
+  ],
+  "properties": {
+    "laudo_id": { "type": "string" },
+    "timestamp_utc": { "type": "string" },
+    "lgpd_article_compliance": { "type": "string" },
+    "scib_score": { "type": "integer" },
+    "integrity_sha256": { "type": "string" }
+  }
+}

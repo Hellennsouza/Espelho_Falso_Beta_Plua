@@ -1,0 +1,12 @@
+openapi: 3.0.3
+info:
+  title: Operacao Espelho Falso v8.2.1 Beta Plus API
+  description: Contrato OpenAPI para integracao do pipeline de auditoria biometrica e telemetria SOC em tempo real.
+  version: 8.2.1-beta-plus
+paths:
+  /v1/telemetry/evaluate:
+    post:
+      summary: Avalia evento biometrico e telemetria de borda
+      responses:
+        '200':
+          description: Resultado da avaliacao de risco e laudo XAI
